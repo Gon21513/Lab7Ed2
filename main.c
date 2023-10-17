@@ -10,6 +10,10 @@
 #include "driverlib/debug.h"
 #include "driverlib/gpio.h"
 #include "driverlib/sysctl.h" // libreria para control del sistema, aqui tambien esta el reloj
+#include "inc/hw_types.h"
+#include "driverlib/systick.h" //libreria para el segundo delay
+
+
 
 #define XTAL 16000000 //reloj externo de 16MHz
 
@@ -20,10 +24,29 @@
 
 //Variables
 volatile uint32_t ui32Loop; //variable para el delay
+volatile bool delayComplete = false; // Usado para indicar cuando el SysTick ha completado el delay
 
 
 void setup(void); //Función del setup
 
+
+
+//funciones
+
+//segundo delay2
+
+void SysTickHandler(void) {
+    delayComplete = true; // Indica que el delay ha sido completado
+}
+
+
+//delay2
+void delay2(void) {
+    delayComplete = false; // Reiniciar el indicador
+    while (!delayComplete) {
+        // Esperar a que el SysTick complete el delay
+    }
+}
 
 
 //delay para los LEDS
@@ -46,6 +69,15 @@ void setup(void){
 
     GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, RED_LED | BLUE_LED | GREEN_LED);// definir leds como salidas
 
+
+//otra forma de realizar el delay
+
+    // Configurar el SysTick para 1 segundo
+    SysTickPeriodSet(SysCtlClockGet());
+    SysTickIntRegister(&SysTickHandler); // Registrar la función del manejador
+    SysTickIntEnable();
+    SysTickEnable();
+
 }
 
 int main(void){
@@ -59,7 +91,7 @@ while(1) {
     //empezar a encender los leds
 
     //enciende led rojo
-    //porf es para el puerto f
+    //gpioporff es para el puerto f
     //pines quev voy a usar
 
 
