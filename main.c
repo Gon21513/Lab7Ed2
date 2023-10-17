@@ -61,10 +61,22 @@ while(1) {
     //enciende led rojo
     //porf es para el puerto f
     //pines quev voy a usar
+
+
     //pin a enceder, en esre caso el rojos
 
     GPIOPinWrite(GPIO_PORTF_BASE, RED_LED | BLUE_LED | GREEN_LED, RED_LED);
     delay();
+
+    // amariilo, es la combinacion enr verde  y rojo
+    GPIOPinWrite(GPIO_PORTF_BASE, RED_LED | BLUE_LED | GREEN_LED, RED_LED | GREEN_LED);
+    delay();
+
+
+    // verde
+    GPIOPinWrite(GPIO_PORTF_BASE, RED_LED | BLUE_LED | GREEN_LED, GREEN_LED);
+    delay();
+
 
 }
 
